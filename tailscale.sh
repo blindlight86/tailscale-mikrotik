@@ -31,6 +31,8 @@ until /usr/local/bin/tailscale up \
   --reset --authkey=${AUTH_KEY} \
 	--login-server ${LOGIN_SERVER} \
 	--advertise-routes="${ADVERTISE_ROUTES}" \
+ 	--accept-routes=true \
+ 	--accept-dns=false \
   ${TAILSCALE_ARGS}
 do
     sleep 0.1
