@@ -19,6 +19,10 @@ echo "root:${PASSWORD}" | chpasswd
 IFS=',' read -ra SUBNETS <<< "${ADVERTISE_ROUTES}"
 for s in "${SUBNETS[@]}"; do
   ip route add "$s" via "${CONTAINER_GATEWAY}"
+  iptables -t nat -A POSTROUTING -o tailscale0 -j MASQUERADE
+  iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  iptables -A FORWARD -i tailscale0 -o eth0 -j ACCEPT
+  iptables -A FORWARD -i eth0 -o tailscale0 -j ACCEPT
 done
 
 # Set login server for tailscale
