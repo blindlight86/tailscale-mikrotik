@@ -7,11 +7,6 @@ echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 
-# Prepare run dirs
-if [ ! -d "/var/run/sshd" ]; then
-  mkdir -p /var/run/sshd
-fi
-
 # Set root password
 echo "root:${PASSWORD}" | chpasswd
 
@@ -42,7 +37,5 @@ do
 done
 echo Tailscale started
 
-# Start SSH
-/usr/sbin/sshd -D
 
 fg %1
