@@ -80,12 +80,17 @@ jobs:
         id: meta
         uses: docker/metadata-action@v2
         with:
-          images: blindlight/midealua
+          images: blindlight/tailscale-mikrotik
+          
+      - name: Run update-flakes
+        run: |-
+          git clone --branch $(curl --silent "https://api.github.com/repos/tailscale/tailscale/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') "https://github.com/tailscale/tailscale.git"
+          cd tailscale && eval $(./build_dist.sh shellvars) && cd ..
           
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: blindlight/midealua:latest
+          tags: blindlight/tailscale-mikrotik:latest
           labels: ${{ steps.meta.outputs.labels }}
