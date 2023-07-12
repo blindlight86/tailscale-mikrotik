@@ -56,15 +56,10 @@ RUN GOARCH=$TARGETARCH go install -ldflags="\
 
 FROM alpine:3.16
 
-RUN apk add --no-cache ca-certificates iptables iproute2 bash openssh curl jq
-
-RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
-RUN ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
+RUN apk add --no-cache ca-certificates iptables iproute2 bash curl jq
 
 COPY --from=build-env /go/bin/* /usr/local/bin/
-COPY sshd_config /etc/ssh/
 COPY tailscale.sh /usr/local/bin
 
-EXPOSE 22
 CMD ["/usr/local/bin/tailscale.sh"]
 
